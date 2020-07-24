@@ -1,0 +1,3 @@
+from SqlLite_metod import delete_user_from_list_result_scan_user
+
+delete_user_from_list_result_scan_user("flowers___russ")
