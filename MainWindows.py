@@ -125,7 +125,7 @@ def change_state():
 
 def like_thread(time_long):
     global all_subscribe
-    max_count_user = 8  # максимальное количество подписчиков в запросе
+    max_count_user = 6  # максимальное количество подписчиков в запросе
     a = 1
     lime = 0
     while a == 1:
@@ -162,6 +162,7 @@ def like_thread(time_long):
                         Button_elems4.click()
                         # Если все в порядке то
                         print_log('На этого пользователья мы подписаны желательо его отнести к необычным.')
+                        update_users_i_set_unusual(d["un"])
                         # Неоходимо сделать проверку входит ли он в исключенные юзеры
                         continue
                     except:
@@ -260,6 +261,7 @@ def like_thread(time_long):
                     # Первый путь когда нет div с рекомендациями над постами(article/div[2]/section[1])
                     browser.find_element_by_xpath(
                         "//div[4]/div[2]/div/article/div[2]/section[1]/span[1]/button").click()
+                    #/html/body/div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button
                 except:
                     print_log('Ставим лайк по 2 пути!')
                     # Первый путь когда есть div с рекомендациями над постами(article/div[3]/section[1])
@@ -324,22 +326,33 @@ def like_thread(time_long):
                     else:
                         print_log('Наверное мы сюда никогда не попадем.')
                 except:
-                    print_log('Нет страницы пользователя. Помечаем как удаленного.')
-                    print_log('Это закрытый аккаунт или страница не доступна.')
-                    # Если дошли до это то отправим пользователя в странные
-                    update_users_i_set_unusual(d["un"])
-                    Button_elements15 = browser.find_element_by_xpath(
-                        "//h2[contains(text(), 'Это закрытый аккаунт')]")
-                    print_log('Это закрытый аккаунт.2')
-                    if Button_elements15:
-                        print_log('Аккаунт закрытый. Лайк поставить не удастся')
-                        # Обновляем данные что аккаунт закрыт
-                        update_users_i_set_is_closed(d["un"])
-                        # Делаем небольшую паузу и переходим к другому пользователю
-                        time.sleep(random.random() * 15)
-                        continue
-                    else:
-                        print_log('С аккаунтом явно что не так.')
+                    try:
+                        print_log('Нет страницы пользователя. Помечаем как удаленного.')
+                        print_log('Это закрытый аккаунт или страница не доступна.')
+                        # Если дошли до это то отправим пользователя в странные
+                        update_users_i_set_unusual(d["un"])
+                        Button_elements15 = browser.find_element_by_xpath(
+                            "//h2[contains(text(), 'Это закрытый аккаунт')]")
+                        print_log('Это закрытый аккаунт.2')
+                        if Button_elements15:
+                            print_log('Аккаунт закрытый. Лайк поставить не удастся')
+                            # Обновляем данные что аккаунт закрыт
+                            update_users_i_set_is_closed(d["un"])
+                            # Делаем небольшую паузу и переходим к другому пользователю
+                            time.sleep(random.random() * 15)
+                            continue
+                        else:
+                            print_log('С аккаунтом явно что не так.')
+                            time.sleep(random.random() * 15)
+                            # Удоляем из списка сосканированных ползователей
+                            delete_user_from_list_result_scan_user(d["un"])
+                            # Помечаем как удоленного из user_i
+                            update_users_i_set_del(d["un"])
+                            # Помечаем как странного из user_i
+                            update_users_i_set_unusual(d["un"])
+                            continue
+                    except:
+                        print_log('С аккаунтом совсем что не так.')
                         time.sleep(random.random() * 15)
                         # Удоляем из списка сосканированных ползователей
                         delete_user_from_list_result_scan_user(d["un"])
@@ -347,6 +360,7 @@ def like_thread(time_long):
                         update_users_i_set_del(d["un"])
                         # Помечаем как странного из user_i
                         update_users_i_set_unusual(d["un"])
+                        # Переходим к другому пользователю
                         continue
 
                 # В дальнейшем разобратся с этим пользователем, почему кнопка Подписатся не доступна
@@ -371,7 +385,7 @@ def like_thread(time_long):
 def dislike_thread(time_long):
     global all_unsubscribe
     a = 1
-    max_count_user = 6  # максимальное количество подписчиков в запросе
+    max_count_user = 7  # максимальное количество подписчиков в запросе
     un_lime = 0
     while a == 1:
         top_row = 1 + math.floor(max_count_user * random.random())
@@ -487,6 +501,10 @@ def auto_work(minute_work):
             auto_work_datetime_new = time.time() / 60
             print_log("В этом часе робат отработал: " + (auto_work_datetime_new - auto_work_datetime).__str__() + " минут.")
         else:
+            if first_start_browser == 1:
+                browser.close()
+                browser = webdriver.Chrome('C:\\Python\\chromedriver\\chromedriver.exe')
+                first_start_browser = 0
             print_log("Часы работы еше не наступили.")
             time.sleep(600)
 
@@ -515,7 +533,7 @@ def main():
     python_checkbutton = Checkbutton(text="Python", variable=python_lang,
                                      onvalue=1, offvalue=0, padx=15, pady=20, command=change_state)
     python_checkbutton.grid(row=2, column=2, sticky=W)
-    auto_work(35)
+    auto_work(40)
     # x = threading.Thread(target=auto_work, args=[30])  # Создание потока
     # print_log('Запускаем поток auto_work.')
     # x.start()  # Запуск потока
