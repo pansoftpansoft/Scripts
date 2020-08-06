@@ -266,6 +266,7 @@ def get_list_unsubscribe(owner_name, top_row):
     sql = "select target_s, owner_s  from subscription_list " \
           + " where owner_s = ? " \
           + " and target_s not in (select stop_user_name from stop_users) " \
+          + " and target_s not in (select user_name from user_i where user_del=1) " \
           + " and data_uns IS NULL " \
           + " order by data_s  LIMIT 0, " + str(top_row)
 

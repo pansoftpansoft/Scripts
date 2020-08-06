@@ -34,7 +34,7 @@ def clicked():
     :return:
     """
     global browser
-    zakaz_nomer = 1
+    zakaz_nomer: int = 1
     list_user_donor = '{"un":"burdastylerussia"}'
     data = json.loads(list_user_donor)
     print_log(data["un"])
@@ -114,17 +114,18 @@ def on_closing():
         except:
             pass  # Если ответили да то в любом случае закрываем окно
         finally:
-            window.destroy()
+            pass
+            # window.destroy()
 
 
 def change_state():
-    print_log(python_lang.get().__str__())
-    if python_lang.get() == 1:
+    print_log(python_lang.__str__())
+    if python_lang == 1:
         pass
 
 
 def like_thread(time_long):
-    global all_subscribe
+    global all_subscribe, plitka
     max_count_user = 6  # максимальное количество подписчиков в запросе
     a = 1
     lime = 0
@@ -186,23 +187,24 @@ def like_thread(time_long):
                     # или это "Мы на этот акаунт уже подписанны"
                     # или этот "К сожалению, эта страница недоступна."
 
-                    print_log('Это закрытый аккаунт или страница не доступна.')
-                    Button_elements15 = browser.find_element_by_xpath(
-                        "//h2[contains(text(), 'Это закрытый аккаунт')]")
-                    print_log('Это закрытый аккаунт.2')
-                    if Button_elements15:
-                        print_log('Чтото мы сюда никогда не поподали.1')
-                        print_log('Аккаунт закрытый. Лайк поставить не удастся')
-                        # Обновляем данные что аккаунт закрыт
-                        update_users_i_set_is_closed(d["un"])
-                        # Делаем небольшую паузу и переходим к другому пользователю
-                        time.sleep(random.random() * 15)
-                        continue
-                    else:
-                        print_log('Чтото мы сюда никогда не поподали.2')
-                        print_log('Значит нет публикуций.')
-                        time.sleep(random.random() * 15)
-                        continue
+                # Здесь код никогда не выполнялся так как был continion
+                # print_log('Это закрытый аккаунт или страница не доступна.')
+                # Button_elements15 = browser.find_element_by_xpath(
+                #     "//h2[contains(text(), 'Это закрытый аккаунт')]")
+                # print_log('Это закрытый аккаунт.2')
+                # if Button_elements15:
+                #     print_log('Чтото мы сюда никогда не поподали.1')
+                #     print_log('Аккаунт закрытый. Лайк поставить не удастся')
+                #     # Обновляем данные что аккаунт закрыт
+                #     update_users_i_set_is_closed(d["un"])
+                #     # Делаем небольшую паузу и переходим к другому пользователю
+                #     time.sleep(random.random() * 15)
+                #     continue
+                # else:
+                #     print_log('Чтото мы сюда никогда не поподали.2')
+                #     print_log('Значит нет публикуций.')
+                #     time.sleep(random.random() * 15)
+                #     continue
 
                 # Выбираем первую плитку и кликаем на ней.
                 # Выбирае случайным образом из первых 3 плиток.
@@ -210,17 +212,18 @@ def like_thread(time_long):
                     plitka = math.floor(3 * random.random()) + 1
                     print_log('Выбирае случайным образом ' + plitka.__str__() + ' из первых 3 плиток.')
                     time.sleep(1)
-                    #print_log('Проверка hover.')
+                    # print_log('Проверка hover.')
                     hover = browser.find_element_by_xpath(
                         "//div/div[3]/article/div[1]/div/div[1]/div[1]")  # Наведение мыши
                     # //* //div/div[3]/article/div[1]/div/div[1]/div[1]/a/div/div[2]
                     # //*//div/div[2]/article/div[1]/div/div[1]/div[1]
                     #    //div/div[2]/article/div[1]/div/div[1]/div[1]/a/div/div[2]
-                    #print_log('Проверка hover.1')
+                    # print_log('Проверка hover.1')
                     ActionChains(browser).move_to_element(hover).perform()
-                    #print_log('Проверка hover.2')
+                    # print_log('Проверка hover.2')
                     browser.find_element_by_xpath(
                         "//div/div[3]/article/div[1]/div/div[1]/div[" + plitka.__str__() + "]").click()
+                    # //div/div[3]/article/div[1]/div/div[1]/div[1]/a/div[1]/div[2]
                     print_log('Пост открыли.')
                 except:
                     try:
@@ -245,6 +248,8 @@ def like_thread(time_long):
                             print_log('Проверка hover.10')
                             browser.find_element_by_xpath(
                                 "//div/div[2]/article/div[1]/div/div[1]/div[" + plitka.__str__() + "]").click()
+                            # //div/div[2]/article/div[1]/div/div[1]/div[1]/a/div/div[2]
+                            # //div/div[3]/article/div[1]/div/div[1]/div[1]/a/div[1]/div[2]
                             print_log('Проверка hover.11')
                         except:
                             # Помечаем как странного пользователя и переходим к новому
@@ -260,8 +265,8 @@ def like_thread(time_long):
                     print_log('Ставим лайк по 1 пути!')
                     # Первый путь когда нет div с рекомендациями над постами(article/div[2]/section[1])
                     browser.find_element_by_xpath(
-                        "//div[4]/div[2]/div/article/div[2]/section[1]/span[1]/button").click()
-                    #/html/body/div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button
+                        "//div[4]/div[2]/div/article/div/div[3]/section[1]/span[1]/button").click()
+                    # /html/body/div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button
                 except:
                     print_log('Ставим лайк по 2 пути!')
                     # Первый путь когда есть div с рекомендациями над постами(article/div[3]/section[1])
@@ -269,10 +274,18 @@ def like_thread(time_long):
                         browser.find_element_by_xpath(
                             "//div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button").click()
                     except:
-                        browser.find_element_by_xpath(
-                            "//div[3]/div[2]/div/article/div[3]/section[1]/span[1]/button").click()
-                        print_log('Ставим лайк по 3 пути!')
+                        try:
+                            print_log('Ставим лайк по 3 пути!')
+                            browser.find_element_by_xpath(
+                                "//div[3]/div[2]/div/article/div[3]/section[1]/span[1]/button").click()
+                        except:
+                            print_log('Ставим лайк по 4 пути!')
+                            browser.find_element_by_xpath(
+                                "//div[4]/div[2]/div/article/div[2]/section[1]/span[1]/button").click()
 
+                    # //div[4]/div[2]/div/article/div/div[3]/section[1]/span[1]/button
+                    # //div[4]/div[2]/div/article/div/div[3]/section[1]/span[1]/button
+                    # //div[4]/div[2]/div/article/div/div[3]/section[1]/span[1]/button
                     # //div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button
                     # //div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button/div/svg/path
                     # //div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button
@@ -385,7 +398,7 @@ def like_thread(time_long):
 def dislike_thread(time_long):
     global all_unsubscribe
     a = 1
-    max_count_user = 7  # максимальное количество подписчиков в запросе
+    max_count_user = 8  # максимальное количество подписчиков в запросе
     un_lime = 0
     while a == 1:
         top_row = 1 + math.floor(max_count_user * random.random())
@@ -405,16 +418,53 @@ def dislike_thread(time_long):
             time.sleep(5)
             try:
                 # Нажимаем кнопку отписатся
-                Button_elems4 = browser.find_element_by_xpath("//div[1]/div[2]/span/span[1]/button")
+                print_log('Вариант отписки 1')
+                Button_elems4 = browser.find_element_by_xpath("//div[1]/div[2]/div/span/span[1]/button")
+                # //div[1]/div[2]/div/span/span[1]/button
+                # //div[1]/div[2]/div/span/span[1]/button
+                # //div[1]/div[2]/button
+                # //div[1]/div[2]/div/span/span[1]/button
+                # //div[1]/div[2]/button/div/span
                 Button_elems4.click()
                 # Нажимаем пожтверждение отписки
                 time.sleep(5 * random.random())
                 Button_elems4 = browser.find_element_by_xpath("//div[4]/div/div/div/div[3]/button[1]")
                 Button_elems4.click()
-            except:
-                time.sleep(3)
-            finally:
                 update_subscribe_un(owner_user, d["un"])
+            except:
+                try:
+                    # Нажимаем кнопку отписатся
+                    print_log('Вариант отписки 2')
+                    Button_elems4 = browser.find_element_by_xpath("//div[1]/div[2]/span/span[1]/button")
+                    #//div[1]/div[2]/button
+                    # //div[1]/div[2]/div/span/span[1]/button
+                    Button_elems4.click()
+                    # Нажимаем пожтверждение отписки
+                    time.sleep(5 * random.random())
+                    Button_elems4 = browser.find_element_by_xpath("//div[4]/div/div/div/div[3]/button[1]")
+                    Button_elems4.click()
+                    update_subscribe_un(owner_user, d["un"])
+                except:
+                    try:
+                        # Нажимаем кнопку отписатся
+                        print_log('Вариант отписки 3')
+                        Button_elems4 = browser.find_element_by_xpath("//div[1]/div[2]/button")
+                        # //div[1]/div[2]/button
+                        # //div[1]/div[2]/div/span/span[1]/button
+                        # //div[1]/div[2]/div/span/span[1]/button
+                        Button_elems4.click()
+                        # Нажимаем пожтверждение отписки
+                        time.sleep(5 * random.random())
+                        Button_elems4 = browser.find_element_by_xpath("//div[4]/div/div/div/div[3]/button[1]")
+                        #                                              //div[4]/div/div/div/div[3]/button[1]
+                        Button_elems4.click()
+                        update_subscribe_un(owner_user, d["un"])
+                    except:
+                        update_users_i_set_del(d["un"])
+                        update_users_i_set_is_closed(d["un"])
+                        print_log('Неизвестная ошибка при отписке.Срочно на проверку.')
+            finally:
+                time.sleep(3)
                 time.sleep(1)
                 look_storis()
 
@@ -463,10 +513,10 @@ def look_storis():
 
 def auto_work(minute_work):
     global browser
-    ff = 0                                      # Операция которая сейчас выполняется 0 - подписка/ 1 - отписка
-    wwww = 1                                    # Переменная для прерывания бесконечного цикла
-    first_start_browser = 0                     # Статус браузера 0 - не запущен, 1 - запущен
-    auto_work_datetime = time.time() / 60       # Значение времени в минутах на начало работы робота
+    ff = 0  # Операция которая сейчас выполняется 0 - подписка/ 1 - отписка
+    wwww = 1  # Переменная для прерывания бесконечного цикла
+    first_start_browser = 0  # Статус браузера 0 - не запущен, 1 - запущен
+    auto_work_datetime = time.time() / 60  # Значение времени в минутах на начало работы робота
     # while (auto_work_datetime_new.__int__() - auto_work_datetime.__int__()) < minute_work.__int__():
     while wwww == 1:
 
@@ -491,7 +541,7 @@ def auto_work(minute_work):
                 first_start_browser = 1
             print_log('ff =' + ff.__str__())
             if ff == 0:
-                print_log('Сейчас начнется подписка(' + ff.__str__()+').')
+                print_log('Сейчас начнется подписка(' + ff.__str__() + ').')
                 like_thread(minute_work)
                 ff = 1
             else:
@@ -499,7 +549,8 @@ def auto_work(minute_work):
                 dislike_thread(minute_work)
                 ff = 0
             auto_work_datetime_new = time.time() / 60
-            print_log("В этом часе робат отработал: " + (auto_work_datetime_new - auto_work_datetime).__str__() + " минут.")
+            print_log(
+                "В этом часе робат отработал: " + (auto_work_datetime_new - auto_work_datetime).__str__() + " минут.")
         else:
             if first_start_browser == 1:
                 browser.close()
@@ -577,3 +628,13 @@ if __name__ == "__main__":
 #    Где находятся cookie: C: \Users \Имя_пользователя \AppData \Local \Google \Chrome \User Data \Default.
 #    Файл с куками называется Cookies и не имеет расширения.
 #    В старых версиях Chrome последняя папка может называться Profile.
+# 8. Сделать выбор подписки на закрытые аккаунты или нет.
+# 9. Проверять что закрытые пользователи и записовать эту информацию в глобальную базу.
+# 10. Сделать ссылки в базе данных и вызывать их из базы данных в цикле. Настраивать количество вызовов.
+# 11. Проверить что ссылка есть на странице чтобы это не вызовало ошибки.
+# 12. Сделать проверку кто подписался из обойднных пользователей.
+# 13. mungsyz - Сделать четкое определение, что аккаунт закрыт. Чтобы не дергатся.
+# 14. Сделать проверку глобальных ошибок, с проверками доступности интернета.
+# andinrimma
+# 15. При отписке у закрытых пользователей происходит ошибка так как он не дал разрешение на подписку
+# //div[2]/div[2]/div/span/span[1]/button/div/span
