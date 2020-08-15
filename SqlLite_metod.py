@@ -216,9 +216,9 @@ def get_list_subscribe(owner_name, doner_name, top_row):
 
     rez = '['
     publicaciy_limit = 30
-    podpisch_limit = 100
+    podpisch_limit =30
     podpiski_limit_max = 500
-    podpiski_limit_min = 100
+    podpiski_limit_min = 30
     # sql = "select count(user_name) from list_result_scan_user where user_name=? group by user_name HAVING count(user_name)>0"
     # print(sql)
     # " l.podpiski+100 <l.podpisch and "
@@ -229,7 +229,7 @@ def get_list_subscribe(owner_name, doner_name, top_row):
           " and l.parent_name='" + doner_name + \
           "' and (l.publicaciy>10 and  l.publicaciy<1000) " \
           " and (l.podpisch>30 and  l.podpisch<1000) " \
-          " and (l.podpiski<1000) " \
+          " and (l.podpiski<2000) " \
           " and l.user_name not in  (select user_name from user_i where user_del=1 ) " \
           " and l.user_name not in  (select user_name from user_i where unusual>0 ) " \
           " and l.user_name not in  (select stop_user_name from stop_users) " \

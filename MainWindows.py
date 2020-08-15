@@ -21,6 +21,7 @@ from log import print_log
 owner_user = 'olgapoluektova_style'
 password = 'vitavita12'
 doner_user = "burdastylerussia"
+#doner_user = "marianna_vesna"
 all_subscribe = 0
 all_unsubscribe = 0
 browser = webdriver.Chrome('C:\\Python\\chromedriver\\chromedriver.exe')
@@ -126,7 +127,7 @@ def change_state():
 
 def like_thread(time_long):
     global all_subscribe, plitka
-    max_count_user = 6  # максимальное количество подписчиков в запросе
+    max_count_user = 7  # максимальное количество подписчиков в запросе
     a = 1
     lime = 0
     while a == 1:
@@ -259,7 +260,7 @@ def like_thread(time_long):
                             continue
 
                 # Стпавим лайк
-                time.sleep(5 + math.floor(10 * random.random()))
+                time.sleep(6 + math.floor(10 * random.random()))
                 # на разных пользовательях разные лайки
                 try:
                     print_log('Ставим лайк по 1 пути!')
@@ -391,7 +392,10 @@ def like_thread(time_long):
             else:
                 # Отдыхаем и идем на следующий круг
                 # Таймацт до следующего цикла
-                time.sleep(10 * random.random() * random.random() * 14)
+                pause_time = 12 * random.random() * random.random() * 16
+                print_log('pause_time=' + pause_time.__str__())
+                time.sleep(pause_time)
+
         a = 0  # Заканчиваем работу цикла WHILE
 
 
@@ -637,4 +641,12 @@ if __name__ == "__main__":
 # 14. Сделать проверку глобальных ошибок, с проверками доступности интернета.
 # andinrimma
 # 15. При отписке у закрытых пользователей происходит ошибка так как он не дал разрешение на подписку
+#    Поэтому надо подумать подписыватся ли на закрытые аккаунты или нет.
+# 16. Сделать лог юзров которых обошли за день, и если есть повторения то значит возможна ошибка.
+# 17. Сделать контроль разрыва количества подписок и отписок стобы разница была в установленное количество дней.
+#       еслу установлено 4 дня то отписатся необходимо 1 - сегодня 3 - дня в памяти отписываемся от всех кто был на 4 день.
+#       если сегодня 5.07.2020 то отписываемся от 1.07.2020.
+# 18. При окончании списка подписчиков переход к следующеме донору.
+#       Сверить что количество юзеров этого донора и количество по запросу на подписку не равны 0 что возможно при ошибке.
+#       Если ошибки нет то надо взять нового донора.(или сообщить онем в центер управелния полетами)
 # //div[2]/div[2]/div/span/span[1]/button/div/span
